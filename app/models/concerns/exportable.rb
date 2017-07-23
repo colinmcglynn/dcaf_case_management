@@ -10,7 +10,7 @@ module Exportable
     "Has Alt Contact?" => :has_alt_contact?,
     "Voicemail Preference" => :voicemail_preference,
     "Line" => :line,
-    "Spanish?" => :spanish,
+    "Language" => :preferred_language,
     "Age" => :age_range,
     "State" => :state,
     "County" => :county,
@@ -127,6 +127,15 @@ module Exportable
     end
   end
 
+  def preferred_language
+    case language
+    when nil, ''
+      'English'
+    else
+      language
+    end
+  end
+
   def get_field_value_for_serialization(field)
     value = public_send(field)
     if value.is_a?(Array)
@@ -143,7 +152,7 @@ module Exportable
         csv << CSV_EXPORT_FIELDS.keys # Header line
         all.each do |patient|
           csv << CSV_EXPORT_FIELDS.values.map do |field|
-             patient.get_field_value_for_serialization(field)
+            patient.get_field_value_for_serialization(field)
           end
         end
       end
